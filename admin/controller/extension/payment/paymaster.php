@@ -10,20 +10,79 @@
  */
 
 
-class ControllerExtensionPaymentPayMaster extends Controller {
+/**
+ * Тут объявляем константы
+ */
+define('paymasterTitle', 'Оплата через метод PayMaster');
+define('paymasterTitleDesc', 'PayMaster решение номер один - платежный агрегатор.');
+define('paymasterDesc', 'Оплата через агрегатор платежей "PayMaster"');
+define('titleEdit', 'Редактирвание');
+define('textPayment', 'Оплата');
+
+
+/**
+ * Class ControllerExtensionPaymentPayMaster
+ */
+class ControllerExtensionPaymentPaymaster extends Controller
+{
+
+
     private $error = array();
 
-    public function index() {
+    /**
+     * Declaration of class client
+     *
+     * @var object
+     */
+
+
+    /**
+     * Функция конструктор
+     * ControllerExtensionPaymentPaymaster constructor.
+     * @param $registry
+     */
+    public function __construct($registry)
+    {
+        parent::__construct($registry);
+
+        $currentLanguage = $this->language->get('code');
+
+    }
+
+
+    /**
+     * Выводит меню с настройками
+     */
+    public function index()
+    {
         $this->load->language('extension/payment/paymaster');
         $this->document->setTitle = $this->language->get('heading_title');
+        $this->document->setTitle(paymasterTitle);
         $this->load->model('setting/setting');
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-            $this->load->model('setting/setting');
-            $this->model_setting_setting->editSetting('paymaster', $this->request->post);
+            $this->model_setting_setting->editSetting('payment_paymaster', $this->request->post);
             $this->session->data['success'] = $this->language->get('text_success');
-            $this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=payment', true));
+            $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true));
         }
+
+
+        if (isset($this->error['warning'])) {
+            $data['error_warning'] = $this->error['warning'];
+        } else {
+            $data['error_warning'] = '';
+        }
+
+        //a version php check
+        if (PHP_VERSION_ID < 50400) {
+            $data['errorPhpVersion'] = paymasterErrorPhpVersion;
+        }
+        //text for headings
+        $data['headingTitle'] = paymasterTitle;
+        $data['heading_title'] = paymasterTitle;
+        $data['titleEdit'] = titleEdit;
+
+
         $data['heading_title'] = $this->language->get('heading_title');
         $data['text_enabled'] = $this->language->get('text_enabled');
         $data['text_disabled'] = $this->language->get('text_disabled');
@@ -66,24 +125,26 @@ class ControllerExtensionPaymentPayMaster extends Controller {
             $data['error_secret_key'] = '';
         }
 
+        //Испрвление от Алексея Агафонова для Opencart 3
+
+        $data['breadcrumbs'] = array();
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_home'),
-            'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true),
+            'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
         );
-
         $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('text_extension'),
-            'href' => $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=payment', true),
+            'text' => textPayment,
+            'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true)
         );
-
         $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('heading_title'),
-            'href' => $this->url->link('extension/payment/paymaster', 'token=' . $this->session->data['token'], true),
+            'text' => paymasterTitle,
+            'href' => $this->url->link('extension/payment/paymaster', 'user_token=' . $this->session->data['user_token'], true)
         );
 
-        $data['action'] = $this->url->link('extension/payment/paymaster', 'token=' . $this->session->data['token'], true);
 
-        $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=payment', true);
+        $data['action'] = $this->url->link('extension/payment/paymaster', 'user_token=' . $this->session->data['user_token'], true);
+
+        $data['cancel'] = $this->url->link('extension/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
 
         if (isset($this->request->post['paymaster_merchant_id'])) {
@@ -132,7 +193,7 @@ class ControllerExtensionPaymentPayMaster extends Controller {
         } else {
             $data['paymaster_classes'] = array(
                 array(
-                    'paymaster_nalog' => 1,
+                    'paymaster_nalog'    => 1,
                     'paymaster_tax_rule' => 1
                 )
             );
@@ -140,27 +201,27 @@ class ControllerExtensionPaymentPayMaster extends Controller {
 
         $data['tax_rules'] = array(
             array(
-                'id' => 0,
+                'id'   => 0,
                 'name' => '18'
             ),
             array(
-                'id' => 1,
+                'id'   => 1,
                 'name' => '10'
             ),
             array(
-                'id' => 2,
+                'id'   => 2,
                 'name' => '0'
             ),
             array(
-                'id' => 3,
+                'id'   => 3,
                 'name' => 'no'
             ),
             array(
-                'id' => 4,
+                'id'   => 4,
                 'name' => '18/118'
             ),
             array(
-                'id' => 5,
+                'id'   => 5,
                 'name' => '10/110'
             )
         );
@@ -173,11 +234,11 @@ class ControllerExtensionPaymentPayMaster extends Controller {
 
         $data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
-        if (isset($this->request->post['paymaster_status'])) {
-            $data['paymaster_status'] = $this->request->post['paymaster_status'];
-        } else {
-            $data['paymaster_status'] = $this->config->get('paymaster_status');
-        }
+//        if (isset($this->request->post['payment_paymaster_status'])) {
+//            $data['payment_paymaster_status'] = $this->request->post['payment_paymaster_status'];
+//        } else {
+//            $data['payment_paymaster_status'] = $this->config->get('payment_paymaster_status');
+//        }
 
         if (isset($this->request->post['paymaster_sort_order'])) {
             $data['paymaster_sort_order'] = $this->request->post['paymaster_sort_order'];
@@ -189,10 +250,22 @@ class ControllerExtensionPaymentPayMaster extends Controller {
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->load->view('extension/payment/paymaster.tpl', $data));
+
+        $this->response->setOutput($this->load->view('extension/payment/paymaster', $data));
     }
 
-    private function validate() {
+    /**
+     * Валидация формы
+     * @return bool
+     */
+    private function validate()
+    {
+//        print "<pre>";
+//        var_dump($this->request);
+//        print "</pre>";
+//
+//        die();
+
         if (!$this->user->hasPermission('modify', 'extension/payment/paymaster')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
