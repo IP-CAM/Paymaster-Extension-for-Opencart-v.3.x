@@ -34,13 +34,13 @@ Click the "Save" button.
 
 To work with an online checkout: Add tax classes
 
-1. Tax rates in tax classes must be empty
+1.Tax rates in tax classes must be empty
 
-2. Входим в настройки модуля Paymaster
+2. Enter the settings of the Paymaster module
 
-3. Присваиваем налоговый класс к налоговой ставке
+3. We assign the tax class to the tax rate
 
-4. Добавляем всем товарам налоговый класс
+4. Add tax class to all products
 
-5. Включаем учет налогов
+5. Turn on tax accounting 
 
