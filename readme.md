@@ -1,65 +1,46 @@
-Модуль оплаты для Opencart 3.x.x - PayMaster
+Payment module for Opencart 3.x.x - PayMaster
 
-В ЛК Paymaster необходимо произвести  следующие настройки:
-1. Список сайтов -> Настройки -> Блок "Технические параметры"
-    Выберите "Тип подписи", рекомендуемый SHA256
-    Введите "Секретный ключ"
-Нажмите «Сохранить»
-
-
-2. Список сайтов -> Настройки -> Блок "Обратные вызовы"
-    Payment Notification: выбрать POST-запрос и в появившемся поле вставить отредактированную ссылку:
-    http://ВАШ_САЙТ/index.php?route=extension/payment/paymaster/callback
-    Success redirect: выбрать POST-запрос и в появившемся поле вставить отредактированную ссылку:
-    http://ВАШ_САЙТ/index.php?route=extension/payment/paymaster/success
-    Failure redirect: выбрать POST-запрос и в появившемся поле вставить отредактированную ссылку:
-    http://ВАШ_САЙТ/index.php?route=extension/payment/paymaster/fail
-Нажмите «Сохранить»
+The following settings must be made in the Paymaster LC:
+1. List of sites -> Settings -> Block "Technical parameters"
+    Select "Signature Type" recommended by SHA256
+    Enter "Secret Key"
+Click "Save"
 
 
+2. List of sites -> Settings -> Block "Callbacks"
+    Payment Notification: select a POST request and insert the edited link in the appeared field:
+    http: //YOUR_SITE/index.php? route = extension / payment / paymaster / callback
+    Success redirect: select a POST request and paste the edited link in the field that appears:
+    http: //YOUR_SITE/index.php? route = extension / payment / paymaster / success
+    Failure redirect: select a POST request and paste the edited link in the field that appears:
+    http: //YOUR_SITE/index.php? route = extension / payment / paymaster / fail
+Click "Save"
 
 
+Installing the module:
 
+1. Upload the archive files (contents of the upload folder) to the site root.
 
-Установка модуля:
+2. Log into the admin panel (Add-ons / Add-ons), select the add-on type "Payments", activate the Paymaster module.
 
-1. Загрузите файлы архива (содержимое папки upload) в корень сайта.
+4. Click the "Change" button.
+    Enter the Identifier in the fields that appear - LMI_MERCHANT_ID (from the PayMaster personal account (List of sites / ID)).
+    Select "Data encryption method" (exactly the same as in your PayMaster personal account)
+    Enter the "Secret Key" (exactly the same as in your PayMaster personal account)
+    Select "Order status after payment" (the order will be transferred to this status after successful payment on the PayMaster website)
+    Change "Status" to "Enabled"
 
-2. Войдите в панель администратора (Дополнения/Дополнение), выберите тип дополнения "Платежи", активируйте модуль Paymaster.
+Click the "Save" button.
 
-4. Нажмите кнопку "Изменить".
-    Введите в появившихся полях Идентификатор - LMI_MERCHANT_ID (из личного кабинета PayMaster (Список сайтов/ID)).
-    Выберите "Метод шифрования данных" (точно такой же, как в личном кабинете PayMaster)
-    Введите "Секретный ключ" (точно такой же, как в личном кабинете PayMaster)
-    Выберите "Статус заказа после оплаты" (в этот статус будет переводиться заказ после успешной оплаты на сайте PayMaster)
-    Измените "Статус" на "Включен"
+To work with an online checkout: Add tax classes
 
-Нажмите кнопку "Сохранить".
+1. Tax rates in tax classes must be empty
 
+2. Входим в настройки модуля Paymaster
 
+3. Присваиваем налоговый класс к налоговой ставке
 
+4. Добавляем всем товарам налоговый класс
 
-Для работы с онлайн-кассой:   Добавляем налоговые классы
-
-
-
-    1. Налоговые ставки в налоговых классах должны быть пустые
-
-
-
-    2. Входим в настройки модуля Paymaster
-
-
-
-    3. Присваиваем налоговый класс к налоговой ставке
-
-
-
-
-    4. Добавляем всем товарам налоговый класс
-
-
-
-
-    5. Включаем учет налогов
+5. Включаем учет налогов
 
